@@ -5,7 +5,6 @@ class simple_problem_solver:
 		self.agent_impl = agent_impl
 		self.state = agent_impl.get_state()
 		self.actions = []
-
 	def act(self, percept):
 		self.state = self.agent_impl.update_state(percept)
 		if (len(self.actions) == 0):
@@ -15,6 +14,7 @@ class simple_problem_solver:
 			#print(self.actions)
 			if (self.actions==None):
 				return None
+		
 		action = self.actions.pop(0)
 		return action
 
@@ -32,7 +32,8 @@ class Node:
 		node = self
 		actions = []
 		while (node != None):
-			actions.insert(0,node.action)
+			if (node.action):
+				actions.insert(0,node.action)
 			node = node.parent
 		return actions
 		
@@ -55,7 +56,10 @@ class agent_impl:
 
 	def expand(self, node):
 		pass
-
+		
+	def objective_test(self, goal):
+		pass
+		
 	def search(self):
 		pass
 

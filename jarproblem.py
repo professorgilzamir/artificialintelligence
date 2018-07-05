@@ -22,6 +22,9 @@ class simple_tree_jar_agent:
 		self.frontier = []
 		pass
 	
+	def objective_test(self, goal):
+		return goal[0] == self.state[0] and goal[1] == self.state[1]
+
 	def expand(self, node):
 		esvaziar_3 = [node.state[0], 0]
 		esvaziar_4 = [0, node.state[1]]
@@ -45,7 +48,7 @@ class simple_tree_jar_agent:
 				return None
 			node = self.frontier.pop(0)
 			#print(node.state)
-			if (node.state[0] == self.goal[0] and node.state[1] == self.goal[1]):
+			if (self.objective_test(node.state)):
 				return node.solution()
 			children = self.expand(node)
 			for c_node in children:
