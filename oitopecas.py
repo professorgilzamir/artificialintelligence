@@ -1,8 +1,47 @@
 from agent import simple_problem_solver
 from agent import Node
 import random as rd
+import bisect
 
+def print_state(state):
+	for i in range(state.width):
+		for j in range(state.height):
+			print("%d "%(state.get(i, j)), end="")
+		print()
 
+def h(agent, n):
+	#implemente sua heuristica aqui
+	return 0
+
+def f(agent, n):
+	return n.path_cost + h(agent, n)
+
+class ComparableNode(Node):
+	def __init__(self,parent, state, step_cost, action, fcost=0):
+		super().__init__(parent, state, step_cost, action)
+		self.fcost = fcost
+		self.fcost = fcost
+
+	def __lt__(self, other):
+		if (other):
+			return self.fcost < other.fcost
+		return false
+
+	def __le__(self, other):
+		if (other):
+			return self.fcost <= other.fcost
+		return False
+
+	def __gt__(self, other):
+		if (other):
+			return self.fcost > other.fcost
+		return False
+
+	def __ge__(self, other):
+		if (other):
+			return self.fcost > other.fcost
+		return false
+		
 class matrix:
 	def __init__(self, nlines, ncolumns, data=None):
 		self.width = ncolumns
@@ -31,6 +70,12 @@ class matrix:
 		
 	def get(self, i, j):
 		return self.data[self.get_index(i, j)]
+		
+	def get_position(self, value):
+		for i in range(self.N):
+			if (value == self.data[i]):
+				return self.get_coords(i)
+		return None
 		
 	def copy(self):
 		return matrix(self.width, self.height, self.data.copy())
@@ -98,10 +143,10 @@ class simple_tree_eight_agent:
 		self.actions = []
 		self.frontier = []
 	
-	def objective_test(self, node):
-		if 	(node.data == self.goal.data):
-			print(node.data)
-			print(self.goal.data)
+	def objective_test(self, state):
+		if 	(state.data == self.goal.data):
+			#print(state.data)
+			#print(self.goal.data)
 			return True
 		else:
 			return False
@@ -112,16 +157,15 @@ class simple_tree_eight_agent:
 		west_state = self.environment.apply_action("WEST", node.state.copy())
 		east_state = self.environment.apply_action("EAST", node.state.copy())
 		
-		return [ Node(node, south_state, 1, "SOUTH"), Node(node, north_state, 1, "NORTH"),
-					Node(node, west_state, 1, "WEST"), Node(node, east_state, 1, "EAST") ]
+		return [ ComparableNode(node, south_state, 1, "SOUTH"), ComparableNode(node, north_state, 1, "NORTH"),
+					ComparableNode(node, west_state, 1, "WEST"), ComparableNode(node, east_state, 1, "EAST") ]
 
 	def search(self):
-		self.frontier.append(Node(None, self.state.copy(), 0, "Iniciar"))
+		self.frontier.append(Node(None, self.state.copy(), 1, None))
 		while True:
 			if len(self.frontier) == 0:
 				return None
 			node = self.frontier.pop(0)
-			#print(node.state)
 			if (self.objective_test(node.state)):
 				print(node.state)
 				return node.solution()
@@ -156,28 +200,50 @@ class simple_graph_eight_agent(simple_tree_eight_agent):
 					self.frontier.append(c_node)
 					self.frontier_log[key] = True
 
-def print_state(state):
-	for i in range(state.width):
-		for j in range(state.height):
-			print("%d "%(state.get(i, j)), end="")
-		print()
-		
+
+class astar_agent(simple_tree_eight_agent):
+	def __init__(self,  environment=None, N=3, initial_state=[7,2,4,5,0,6,8,3,1]):
+		super().__init__(environment, N, initial_state)
+
+	def search(self):
+		self.closed = {}
+		self.frontier_log = {}
+		self.frontier.append(Node(None, self.state, 0, None))
+		self.frontier_log[genkey(self.state)] = True
+		while True:
+			if len(self.frontier) == 0:
+				return None
+			node = self.frontier.pop(0)
+			
+			del self.frontier_log[genkey(node.state)]
+			if (self.objective_test(node.state)):
+				print("SOLUTION")
+				print_state(node.state)
+				return node.solution()
+			self.closed[genkey(node.state)] = True
+			children = self.expand(node)
+			for c_node in children:
+				key = genkey(c_node.state)
+				if (not key  in self.closed) and (not key in self.frontier_log): 	
+					c_node.fcost = f(self, c_node)
+					bisect.insort_right(self.frontier, c_node)
+					self.frontier_log[key] = True	
 					
 if __name__ == "__main__":
 	env = Environment(3)
-	agent = simple_graph_eight_agent(env)
+	agent = astar_agent(env)
 	solver = simple_problem_solver(agent)
 	env.state = agent.state.copy()
-	result = solver.act(env.state)
+	action = solver.act(env.state)
 	print("START")
 	print_state(env.state)
-	env.apply_action(result)
-	print("%s"%(result))
+	env.apply_action(action)
+	print("%s"%(action))
 	print_state(env.state)
 	while not (agent.objective_test(env.state)):
-		result = solver.act(env.state)
-		env.apply_action(result)
-		print("%s"%(result))
+		action = solver.act(env.state)
+		env.apply_action(action)
+		print("%s"%(action))
 		print_state(env.state)
 	'''
 	agent.state.data = [7, 6, 3, 2, 5, 1, 0, 8, 4]

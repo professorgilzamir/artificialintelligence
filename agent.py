@@ -7,12 +7,14 @@ class simple_problem_solver:
 		self.actions = []
 	def act(self, percept):
 		self.state = self.agent_impl.update_state(percept)
+		if (not self.actions):
+			self.actions = []
 		if (len(self.actions) == 0):
 			self.agent_impl.formulate_goal()
 			self.agent_impl.formulate_problem()
 			self.actions = self.agent_impl.search()
 			#print(self.actions)
-			if (self.actions==None):
+			if (not self.actions):
 				return None
 		
 		action = self.actions.pop(0)
