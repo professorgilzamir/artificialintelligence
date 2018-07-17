@@ -3,6 +3,17 @@ from agent import Node
 import random as rd
 import bisect
 
+def count_inversions(state):
+	c = 0
+	for i in range(len(state.data)-1):
+		if state.data[i] < state.data[i+1] and  not (state.data[i] == 0 and state.data[i+1]==0):
+			c += 1
+	return c
+
+def calc_parity(state):
+	return count_inversions(state) + state.get_zero_coords()[0]
+	
+
 def print_state(state):
 	for i in range(state.width):
 		for j in range(state.height):
@@ -52,7 +63,7 @@ class matrix:
 		else:
 			values = []
 			for i in range(self.N):
-				values.append(i) 
+				values.append(0) 
 			self.data = rd.sample(values, self.N)
 	
 	def get_index(self, line, column):
@@ -70,7 +81,11 @@ class matrix:
 		
 	def get(self, i, j):
 		return self.data[self.get_index(i, j)]
-		
+	
+	def set(self, i, j, v):
+		idx = self.get_index(i, j)
+		self.data[idx] = v
+	
 	def get_position(self, value):
 		for i in range(self.N):
 			if (value == self.data[i]):
