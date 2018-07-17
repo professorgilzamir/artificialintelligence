@@ -29,7 +29,7 @@ class GeneticAlg:
 	def step(self):
 		novapop = []
 		n = len(self.population)
-		for i in range(n):
+		while len(novapop) < n:
 			p1 = None
 			p2 = None
 			k = n-1
@@ -56,5 +56,8 @@ class GeneticAlg:
 			if (p1 and p2):
 				ch1 = self.environment.crossover(p1, p2)
 				self.environment.mutate(ch1, self.mutationrate)
+				ch2 = self.environment.crossover(p2, p1)
+				self.environment.mutate(ch2, self.mutationrate)
 				novapop.append(ch1)
+				novapop.append(ch2)
 		self.population = novapop
