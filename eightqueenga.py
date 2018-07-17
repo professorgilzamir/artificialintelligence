@@ -51,7 +51,7 @@ class EightQueenEnvironment:
 					linha2 = ch.data[j]
 					if (linha1 == linha2 or i == j or abs((linha2-linha1)/(i-j)) == 1.0):
 						q += 1
-		return 56-q;
+		return 28-q;
 
 if __name__ == "__main__":
 	ga = GeneticAlg(EightQueenEnvironment(200), 0.0)
@@ -60,7 +60,7 @@ if __name__ == "__main__":
 		ga.update_fitness()	
 		ch = ga.population[-1]
 		print("%f"%(ch.fitness))
-		if (ch.fitness >= 56):
+		if (ch.fitness >= 28):
 			break
 		ga.step()
 	ga.update_fitness()
