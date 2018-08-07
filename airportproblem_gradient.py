@@ -72,10 +72,10 @@ def grad(i):
 
 if __name__=="__main__":
 	update_nearest()
-	step_size = 0.000025
+	step_size = 0.5
 	epslon = 0.000000025
 	p = f()
-	n = 100000000000000000000
+	n = float("inf")
 	plt.plot(xstate, ystate, 'bo')
 	plt.plot(X, Y, 'bo', color='red')
 	print("Cost: %f"%(p))
