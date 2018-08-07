@@ -60,21 +60,4 @@ x = x * (maxx - minx) + minx
 yr = yr * (maxy - miny) + miny
 
 plt.plot(x, yr, 'ro', marker='o', markersize=3, color='blue')
-
-
-'''
-ax.plot_surface(x, y, z, color='b', cmap=cm.coolwarm)
-p = np.array([0.5, -0.2, f(0.5, 0.2)])
-plt.plot([p[0]], [p[1]], [p[2]], marker='o',markersize=3, color='red')
-step_size = 0.05
-max_steps = 1000
-#INICO::GERA PONTOS AO LONGO DO CAMINHO
-for i in range(max_steps):
-	dx, dy = gradient(p[0], p[1])
-	p[0] = p[0] - step_size * dx
-	p[1] = p[1] - step_size * dy
-	p[2] = f(p[0], p[1])
-	plt.plot([p[0]], [p[1]], [p[2]], marker='o',markersize=3, color='red')
-#FIM::GERA PONTOS AO LONGO DO CAMINHO
-'''
 plt.show() #exibir na tela
