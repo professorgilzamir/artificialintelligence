@@ -48,16 +48,14 @@ def f():
 		C1 = C1[0]
 	if len(C2)>0:
 		C2 = C2[0]
-	d0 = 0
-	d1 = 0
-	d2 = 0
+	d = 0
 	for c in C0:
-		d0 += dist(c, 0)
+		d += dist(c, 0)
 	for c in C1:
-		d1 += dist(c, 1)
+		d += dist(c, 1)
 	for c in C2:
-		d2 += dist(c, 2)
-	return d0 + d1 + d2
+		d += dist(c, 2)
+	return d
 	
 def grad(i):	
 	C = np.argwhere(NEAREST==i)
