@@ -8,7 +8,7 @@ def grad(X):
 
 if __name__=="__main__":
 	step_size = 0.01
-	epslon = 0.000001
+	epslon = 0.00000000000000001
 	p = 0.5
 	p0 = float("inf")
 	print("Cost: %f"%(p))
