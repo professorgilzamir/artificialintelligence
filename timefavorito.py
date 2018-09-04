@@ -58,7 +58,6 @@ def codigo_titulos(valor):
 	else:
 		return 3
 
-
 '''
 Esta funcao gera um dicionario que associa quantidade de títulos
 de determinado campeonato (campeonato=1 significa brasileirao,
