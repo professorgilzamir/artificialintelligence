@@ -1,4 +1,34 @@
+import numpy as np
+from matplotlib import pyplot
 import csv
+
+
+def log2(x):
+	if x:
+		return np.log(x)/np.log(2)
+	else:
+		return 0.0
+
+def entropia2(p, n):
+	pa = p/(p+n)
+	pb = n/(p+n)
+	return - pa * log2(pa) - pb * log2(pb)
+
+
+def entropia(exemplos, a, b):
+	na = 0
+	nb = 0
+	for e in exemplos:
+		if e == a:
+			na += 1
+		elif e == b:
+			nb += 1
+
+	pa = na/len(exemplos)
+	pb = nb/len(exemplos)
+
+	return - pa * log2(pa) - pb * log2(pb)
+
 
 class No:
 	def __init__(self, rotulo="", pai=None, filhos=[]):
@@ -16,7 +46,7 @@ class Arvore:
 	def __init__(self, raiz):
 		self.raiz = raiz;
 
-	def addChild(self, filho, pai):
+	def adicionarFilho(self, filho, pai):
 		pai.filhos.append(filho)
 
 def mesmaClassificacao(exemplos):
@@ -42,6 +72,12 @@ def maioria(exemplos):
 			max_k = k
 	return max_k
 
+def filtrar_exemplos(exemplos, rotulo):
+	pass
+
+def filtrar_atributos(atributos, rotulos):
+	pass
+
 def carregar_dados(path):
 	#INICO::ESTA PARTE DO CODIGO REALIZA LEITURA DOS DADOS DO ARQUIVO CSV
 	tabela = []
@@ -52,8 +88,11 @@ def carregar_dados(path):
 				tabela.append([row[0].strip(), row[1].strip(), int(row[2].strip()), int(row[3].strip())])
 	return tabela
 
+def escolherMelhorAtributo(exemplos, atributos):
+	return random.choice(atributos)
 
-def arvore_decisao(exemplos, atributos, padrao):
+
+def arvore_decisao(exemplos, atributos, valores, padrao):
 	if (len(exemplos) == 0):
 		return padrao
 
@@ -63,6 +102,15 @@ def arvore_decisao(exemplos, atributos, padrao):
 	if (len(atributos) == 0):
 		return No(maioria(exemplos), padrao, None)
 
+	melhor = escolherMelhorAtributo(exemplos, atributos)
+	arvore = No(melhor.rotulo, None, [])
+	for v in valores[no.rotulo]:
+		exemplos = filtrar_exemplos(exemplo, no.rotulo)
+		atributos = filhar_atributos(atributos, no.rotulo)
+		subarvore = arvore_decisao(exemplos, atributos, valores, no)
+		arvore.filhos.append(subarvore)
+	return arvore
+
 tabela = carregar_dados('teste.txt')
 no = arvore_decisao(tabela, [], None)
-print(no)
+print(escolherMelhorAtributo(None, [1, 2, 3]))
