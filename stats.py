@@ -2,7 +2,7 @@ from matplotlib import pyplot as plt
 import random
 import numpy as np
 
-x = np.arange(100) + 1
+x = np.arange(100)
 y = np.zeros(100)
 
 for j in range(1000):
