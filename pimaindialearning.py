@@ -13,7 +13,7 @@ def loss(X, W, Y):
 #calcula o gradiente
 def grad(X, Y, W):
 	fxw = f(X, W)
-	return 2 * (Y-fxw)  * (-1) * fxw * (1.0-fxw) * W
+	return -2 * (Y-fxw) * fxw * (1.0-fxw) * W
 
 def carregar_dados(path):
 	#INICO::ESTA PARTE DO CODIGO REALIZA LEITURA DOS DADOS DO ARQUIVO CSV
