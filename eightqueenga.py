@@ -54,7 +54,7 @@ class EightQueenEnvironment:
 		return 28-q;
 
 if __name__ == "__main__":
-	ga = GeneticAlg(EightQueenEnvironment(300), 0.09)
+	ga = GeneticAlg(EightQueenEnvironment(300), 0.5)
 	print("Population initial size is %d"%(len(ga.population)))
 	for i in range(1000):
 		ga.update_fitness()	
